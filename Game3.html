@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Falling Objects</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+
+        #gameArea {
+            position: relative;
+            width: 80vw;
+            height: 90vh;
+            border: 2px solid #333;
+            background-color: #e0f7fa;
+        }
+
+        .falling-object, #player {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+        }
+
+        .falling-object {
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        #player {
+            bottom: 10px;
+            background-color: blue;
+            border-radius: 10px;
+        }
+
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="player"></div>
+        <div id="gameOver">Game Over! Score: <span id="finalScore"></span></div>
+    </div>
+
+    <script>
+        const gameArea = document.getElementById('gameArea');
+        const player = document.getElementById('player');
+        const gameOverDisplay = document.getElementById('gameOver');
+        const finalScore = document.getElementById('finalScore');
+        let playerPosX = gameArea.clientWidth / 2;
+        player.style.left = `${playerPosX}px`;
+
+        let missedObjects = 0;
+        const maxMissedObjects = 5;
+        let score = 0;
+        let gameOver = false;
+
+        function createFallingObject() {
+            if (gameOver) return;
+            const object = document.createElement('div');
+            object.classList.add('falling-object');
+            object.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`;
+            gameArea.appendChild(object);
+
+            let posY = 0;
+            const fallInterval = setInterval(() => {
+                if (gameOver) {
+                    clearInterval(fallInterval);
+                    return;
+                }
+
+                posY += 5;
+                object.style.top = `${posY}px`;
+
+                if (posY > gameArea.clientHeight - 60 && checkCollision(object)) {
+                    clearInterval(fallInterval);
+                    gameArea.removeChild(object);
+                    updateScore();
+                } else if (posY > gameArea.clientHeight) {
+                    missedObjects++;
+                    clearInterval(fallInterval);
+                    gameArea.removeChild(object);
+                    checkGameOver();
+                }
+            }, 50);
+        }
+
+        function checkCollision(object) {
+            const playerRect = player.getBoundingClientRect();
+            const objectRect = object.getBoundingClientRect();
+
+            return (
+                playerRect.left < objectRect.right &&
+                playerRect.right > objectRect.left &&
+                playerRect.top < objectRect.bottom &&
+                playerRect.bottom > objectRect.top
+            );
+        }
+
+        function updateScore() {
+            score++;
+            document.title = `Score: ${score}`;
+        }
+
+        function checkGameOver() {
+            if (missedObjects >= maxMissedObjects) {
+                gameOver = true;
+                gameOverDisplay.style.display = 'block';
+                finalScore.textContent = score;
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            const step = 20;
+            if (event.key === 'ArrowLeft' && playerPosX > 0) {
+                playerPosX -= step;
+            } else if (event.key === 'ArrowRight' && playerPosX < gameArea.clientWidth - 50) {
+                playerPosX += step;
+            }
+            player.style.left = `${playerPosX}px`;
+        });
+
+        setInterval(createFallingObject, 1000);
+    </script>
+</body>
+</html>

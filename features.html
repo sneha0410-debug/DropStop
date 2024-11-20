@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DropStop Features</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        header {
+            width: 100%;
+            background-color: black;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            z-index: 1000; 
+        }
+        header h1 {
+            color: white;
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .features {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 80px; 
+        }
+        .feature {
+            background-color: white;
+            padding: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 400px; 
+            font-size: 1.5rem; 
+            font-weight: bold;
+            margin: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .feature a {
+            text-decoration: none;
+            color: black;
+        }
+        .feature:hover {
+            transform: scale(1.05); 
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>DropStop</h1>
+    </header>
+
+    <div class="features">
+        <div class="feature"><a href="Quizzes.html">Quizzes</a></div>
+        <div class="feature"><a href="Lectures.html">Online Lectures</a></div>
+        <div class="feature"><a href="Games.html">Games</a></div>
+    </div>
+
+</body>
+</html>

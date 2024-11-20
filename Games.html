@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .games-container {
+            display: flex;
+            gap: 20px; /* Space between game options */
+        }
+        .feature {
+            background-color: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 250px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .feature a {
+            text-decoration: none;
+            color: black;
+            display: block;
+        }
+        .feature:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05); /* Slight zoom effect on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="games-container">
+        <div class="feature"><a href="TTT.html">Tic-Tac-Toe</a></div>
+        <div class="feature"><a href="Game2.html">Quick Typing Test</a></div>
+        <div class="feature"><a href="Game3.html">Catch the Falling Objects</a></div>
+    </div>
+
+</body>
+</html>

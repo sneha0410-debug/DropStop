@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Typing Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #sentence {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        #input-area {
+            width: 60%;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 8px 12px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quick Typing Test</h1>
+    <p id="sentence">Press Start to begin typing...</p>
+    <input type="text" id="input-area" disabled placeholder="Type the sentence here...">
+    <button onclick="startGame()">Start Game</button>
+    <div id="result"></div>
+
+    <script>
+        const sentences = [
+            "The quick brown fox jumps over the lazy dog.",
+            "JavaScript is a versatile programming language.",
+            "Practice makes perfect.",
+            "This is a typing speed test.",
+            "Always strive to learn something new every day."
+        ];
+
+        let startTime, endTime, currentSentence;
+
+        function startGame() {
+            document.getElementById('input-area').value = '';
+            document.getElementById('result').textContent = '';
+            document.getElementById('input-area').disabled = false;
+            currentSentence = sentences[Math.floor(Math.random() * sentences.length)];
+            document.getElementById('sentence').textContent = currentSentence;
+            startTime = new Date().getTime();
+            document.getElementById('input-area').focus();
+        }
+
+        document.getElementById('input-area').addEventListener('input', function() {
+            if (this.value === currentSentence) {
+                endTime = new Date().getTime();
+                const timeTaken = (endTime - startTime) / 1000;
+                document.getElementById('result').textContent = `Time: ${timeTaken.toFixed(2)} seconds`;
+                document.getElementById('input-area').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
