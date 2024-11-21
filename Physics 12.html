@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .feedback {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Physics Quiz - Class 12</h2>
+    <div id="quiz-container"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        let currentQuestionIndex = 0;
+
+        const quizQuestions = [
+            {
+                question: "What is the formula of de Broglie wavelength?",
+                options: { A: "λ = h/p", B: "λ = h/mv", C: "λ = mv/h" },
+                correctAnswer: "A"
+            },
+            {
+                question: "Which law explains the concept of mutual inductance?",
+                options: { A: "Faraday's Law", B: "Lenz's Law", C: "Ampere's Law" },
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the SI unit of capacitance?",
+                options: { A: "Farad", B: "Coulomb", C: "Weber" },
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the speed of electromagnetic waves in a vacuum?",
+                options: { A: "3 x 10^8 m/s", B: "2.8 x 10^8 m/s", C: "1.5 x 10^8 m/s" },
+                correctAnswer: "A"
+            },
+            {
+                question: "Which phenomenon is explained by Einstein's photoelectric equation?",
+                options: { A: "Photoelectric Effect", B: "Compton Effect", C: "Tyndall Effect" },
+                correctAnswer: "A"
+            }
+        ];
+
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <label>${question.question}</label>
+                    <form id="quiz-form">
+                        ${Object.keys(question.options).map(option => `
+                            <input type="radio" name="answer" value="${option}" required>
+                            <label>${option}: ${question.options[option]}</label><br>
+                        `).join('')}
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                </div>
+            `;
+
+            // Attach submit event to the form
+            document.getElementById('quiz-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const selectedAnswer = formData.get('answer');
+                const correctAnswer = quizQuestions[currentQuestionIndex].correctAnswer;
+                const feedbackElement = document.getElementById('feedback');
+
+                if (selectedAnswer === correctAnswer) {
+                    feedbackElement.innerText = "Correct!";
+                } else {
+                    feedbackElement.innerText = `Incorrect! The correct answer is ${correctAnswer}.`;
+                }
+
+                currentQuestionIndex++;
+
+                setTimeout(() => {
+                    if (currentQuestionIndex < quizQuestions.length) {
+                        displayQuestion();
+                        document.getElementById('feedback').innerText = ''; 
+                    } else {
+                        document.getElementById('quiz-container').innerHTML = '<h3>Quiz Completed! <br> Redirecting to Class 12 page...</h3>';
+                        setTimeout(() => {
+                            window.location.href = 'Class 12.html';  
+                        }, 3000);  
+                    }
+                }, 2000);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', displayQuestion);
+    </script>
+</body>
+</html>

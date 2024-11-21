@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Quiz - Class 12</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .feedback {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Chemistry Quiz - Class 12</h2>
+    <div id="quiz-container"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        const subject = 'chemistry';
+
+        const quizQuestions = [
+            {
+                question: "Which of the following is a nucleophile?",
+                options: { A: "OH-", B: "H+", C: "Cl2" },
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the IUPAC name for Acetone?",
+                options: { A: "Propanone", B: "Ethanol", C: "Butanone" },
+                correctAnswer: "A"
+            },
+            {
+                question: "Which gas is commonly used in the Haber process?",
+                options: { A: "Nitrogen", B: "Hydrogen", C: "Oxygen" },
+                correctAnswer: "B"
+            },
+            {
+                question: "What is the molar mass of sulfuric acid (H2SO4)?",
+                options: { A: "98 g/mol", B: "88 g/mol", C: "100 g/mol" },
+                correctAnswer: "A"
+            },
+            {
+                question: "Which of the following is the strongest acid?",
+                options: { A: "HCl", B: "HNO3", C: "H2SO4" },
+                correctAnswer: "C"
+            }
+        ];
+
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <label>${question.question}</label>
+                    <form id="quiz-form">
+                        ${Object.keys(question.options).map(option => `
+                            <input type="radio" name="answer" value="${option}" required>
+                            <label>${option}: ${question.options[option]}</label><br>
+                        `).join('')}
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                </div>
+            `;
+
+            // Attach submit event to the form
+            document.getElementById('quiz-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const selectedAnswer = formData.get('answer');
+                const correctAnswer = quizQuestions[currentQuestionIndex].correctAnswer;
+                const feedbackElement = document.getElementById('feedback');
+
+                if (selectedAnswer === correctAnswer) {
+                    feedbackElement.innerText = "Correct!";
+                } else {
+                    feedbackElement.innerText = "Incorrect! The correct answer is " + correctAnswer + ".";
+                }
+
+                currentQuestionIndex++;
+
+                setTimeout(() => {
+                    if (currentQuestionIndex < quizQuestions.length) {
+                        displayQuestion();
+                        document.getElementById('feedback').innerText = ''; 
+                    } else {
+                        document.getElementById('quiz-container').innerHTML = '<h3>Quiz Completed! <br> Redirecting to Class 12 page...</h3>';
+                        setTimeout(() => {
+                            window.location.href = 'Class 12.html';  
+                        }, 3000);  
+                    }
+                }, 2000);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', displayQuestion);
+    </script>
+</body>
+</html>
