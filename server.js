@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
@@ -90,6 +90,10 @@ const chemistryQuestions = [
     { question: "What is the chemical symbol for gold?", options: { A: "Au", B: "Ag", C: "Pb" }, correctAnswer: "A" },
     { question: "What is the process of converting a liquid into a gas called?", options: { A: "Condensation", B: "Evaporation", C: "Sublimation" }, correctAnswer: "B" }
 ];
+
+app.get('/lectures.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'lectures.html'));
+});
 
 // Start the server
 app.listen(PORT, () => {

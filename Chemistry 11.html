@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .feedback {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Chemistry Quiz</h2>
+    <div id="quiz-container"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        const subject = 'chemistry';
+
+        const quizQuestions = [
+            {
+                question: "1.) What is the chemical formula for water?",
+                options: { A: "H2O", B: "CO2", C: "O2" },
+                correctAnswer: "A"
+            },
+            {
+                question: "2.) What is the pH level of pure water?",
+                options: { A: "0", B: "7", C: "14" },
+                correctAnswer: "B"
+            },
+            {
+                question: "3.) What is the most abundant gas in the Earth's atmosphere?",
+                options: { A: "Oxygen", B: "Carbon Dioxide", C: "Nitrogen" },
+                correctAnswer: "C"
+            },
+            {
+                question: "4.) What is the chemical symbol for gold?",
+                options: { A: "Au", B: "Ag", C: "Pb" },
+                correctAnswer: "A"
+            },
+            {
+                question: "5.) What is the process of converting a liquid into a gas called?",
+                options: { A: "Condensation", B: "Evaporation", C: "Sublimation" },
+                correctAnswer: "B"
+            }
+        ];
+
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <label>${question.question}</label>
+                    <form id="quiz-form">
+                        ${Object.keys(question.options).map(option => `
+                            <input type="radio" name="answer" value="${option}" required>
+                            <label>${option}: ${question.options[option]}</label><br>
+                        `).join('')}
+                        <input type="hidden" name="subject" value="${subject}">
+                        <input type="hidden" name="questionIndex" value="${currentQuestionIndex}">
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                </div>
+            `;
+
+            // Attach submit event to the form
+            document.getElementById('quiz-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const data = {};
+                formData.forEach((value, key) => { data[key] = value; });
+
+                fetch('/submit-quiz', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById('feedback').innerText = result.feedback;
+
+                    setTimeout(() => {
+                        currentQuestionIndex = result.nextIndex;
+                        if (currentQuestionIndex < quizQuestions.length) {
+                            displayQuestion();
+                            document.getElementById('feedback').innerText = ''; 
+                        } else {
+                            document.getElementById('quiz-container').innerHTML = '<h3>Quiz Completed! <br> Redirecting to Class 11 page...</h3>';
+                            setTimeout(() => {
+                                window.location.href = 'Class 11.html';  
+                            }, 3000);  
+                        }
+                    }, 2000);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', displayQuestion);
+    </script>
+
+</body>
+</html>
+

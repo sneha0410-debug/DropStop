@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .feedback {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Quiz</h2>
+    <div id="quiz-container"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        let currentQuestionIndex = 0;
+
+        const quizQuestions = [
+            {
+                question: "1.) What is the speed of light?",
+                options: { A: "3 x 10^8 m/s", B: "3 x 10^6 m/s", C: "3 x 10^5 m/s" },
+                correctAnswer: "A"
+            },
+            {
+                question: "2.) What is Newton's first law of motion?",
+                options: { A: "Law of inertia", B: "Law of acceleration", C: "Law of action and reaction" },
+                correctAnswer: "A"
+            },
+            {
+                question: "3.) What is the unit of force?",
+                options: { A: "Joule", B: "Newton", C: "Watt" },
+                correctAnswer: "B"
+            },
+            {
+                question: "4.) What is the formula for acceleration?",
+                options: { A: "Distance/Time", B: "Force/Mass", C: "Mass/Time" },
+                correctAnswer: "B"
+            },
+            {
+                question: "5.) What is the gravitational constant?",
+                options: { A: "9.8 m/s^2", B: "6.674 x 10^-11 N m^2/kg^2", C: "1.6 x 10^-19 C" },
+                correctAnswer: "B"
+            }
+        ];
+
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <label>${question.question}</label>
+                    <form id="quiz-form">
+                        ${Object.keys(question.options).map(option => `
+                            <input type="radio" name="answer" value="${option}" required>
+                            <label>${option}: ${question.options[option]}</label><br>
+                        `).join('')}
+                        <input type="hidden" name="questionIndex" value="${currentQuestionIndex}">
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                </div>
+            `;
+
+            // Attach submit event to the form AFTER displaying the question
+            document.getElementById('quiz-form').addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const data = {};
+                formData.forEach((value, key) => { data[key] = value; });
+
+                // Simulating backend response
+                const result = {
+                    feedback: (data.answer === quizQuestions[currentQuestionIndex].correctAnswer) ? "Correct!" : "Incorrect.",
+                    correctAnswer: quizQuestions[currentQuestionIndex].correctAnswer,
+                    nextIndex: currentQuestionIndex + 1
+                };
+
+                // Show feedback with correct answer if incorrect
+                if (data.answer !== quizQuestions[currentQuestionIndex].correctAnswer) {
+                    document.getElementById('feedback').innerText = `Incorrect. The correct answer is: ${result.correctAnswer}`;
+                } else {
+                    document.getElementById('feedback').innerText = result.feedback;
+                }
+
+                // Proceed to next question after a delay
+                setTimeout(() => {
+                    currentQuestionIndex = result.nextIndex;
+                    if (currentQuestionIndex < quizQuestions.length) {
+                        displayQuestion();
+                        document.getElementById('feedback').innerText = ''; 
+                    } else {
+                        document.getElementById('quiz-container').innerHTML = '<h3>Quiz Completed! <br> Redirecting to Class 11 page...</h3>';
+                        setTimeout(() => {
+                            window.location.href = 'Class 11.html';  
+                        }, 3000);  
+                    }
+                }, 2000);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', displayQuestion);
+    </script>
+</body>
+</html>
